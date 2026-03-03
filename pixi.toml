@@ -1,0 +1,47 @@
+[workspace]
+authors = ["Juan Miguel Z. Marqueses <juanmigzmarq@gmail.com>"]
+channels = ["conda-forge", "nodefaults"]
+name = "experimentdashboard"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[tasks]
+# Setup for opencv and such...
+clone = "git clone https://github.com/opencv/opencv.git"
+setup_dir = {cmd="mkdir -p opencv/build"}
+configure = { cmd = """
+cmake -B build -G Ninja \
+  -D CMAKE_BUILD_TYPE=RELEASE \
+  -D CMAKE_INSTALL_PREFIX=$PIXI_PROJECT_ROOT/.pixi/envs/default \
+  -D CMAKE_FIND_ROOT_PATH=$PIXI_PROJECT_ROOT/.pixi/envs/default \
+  -D CMAKE_FIND_ROOT_PATH_MODE_PROGRAM=NEVER \
+  -D CMAKE_FIND_ROOT_PATH_MODE_LIBRARY=ONLY \
+  -D CMAKE_FIND_ROOT_PATH_MODE_INCLUDE=ONLY \
+  -D WITH_GSTREAMER=ON \
+  -D WITH_V4L=ON \
+  -D BUILD_opencv_python3=ON \
+  -D PYTHON_EXECUTABLE=$PIXI_PROJECT_ROOT/.pixi/envs/default/bin/python \
+  -D CMAKE_EXE_LINKER_FLAGS="-Wl,--allow-shlib-undefined" \
+  -D PYTHON_INCLUDE_DIR=$($CONDA_PREFIX/bin/python -c "import sysconfig; print(sysconfig.get_path('include'))") \
+  .
+""", cwd="opencv", depends-on=["setup_dir"]}
+install = { cmd = "cmake --build build --target install", cwd = "opencv", depends-on = ["configure"] }
+
+# GUI and Main Dashboard
+inspect = { cmd = "python main.py", env = {PYTHONUNBUFFERED="1",LD_PRELOAD = "/usr/lib/libmpg123.so", LD_LIBRARY_PATH = ".pixi/envs/default/lib"} }
+gui = {cmd="cargo run",env = { CC = "x86_64-conda-linux-gnu-cc", CXX = "x86_64-conda-linux-gnu-c++" }, cwd="dashboard"}
+
+[dependencies]
+python = ">=3.14.3,<3.15"
+uv = ">=0.10.4,<0.11"
+cmake = ">=4.2.3,<5"
+pkg-config = ">=0.29.2,<0.30"
+gstreamer = ">=1.28.0,<2"
+gst-plugins-base = ">=1.28.0,<2"
+numpy = ">=2.4.2,<3"
+gst-plugins-good = ">=1.28.0,<2"
+gst-plugins-bad = ">=1.28.0,<2"
+mpg123 = ">=1.32.9,<2"
+libmodplug = ">=0.8.8.5,<0.9"
+rust = ">=1.93.1,<1.94"
+ninja = ">=1.13.2,<2"

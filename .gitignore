@@ -1,0 +1,7 @@
+# pixi environments
+.pixi/*
+!.pixi/config.toml
+/opencv
+*records
+*target
+/captured_inspections
