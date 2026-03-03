@@ -12,7 +12,8 @@ graph TD;
     A[ESP32 + Vibration Sensor] -- MQTT Pub --> B(MQTT Broker)
     B -- MQTT Sub --> C[Rust App / iced-rs]
     D[Copper-Clad Board] -- Camera Feed --> E[Python / OpenCV]
-    E -- Analysis Data --> C```
+    E -- Analysis Data --> C
+```
 
 # Prerequisites
 
