@@ -1,6 +1,8 @@
 mod components;
+pub mod pages;
 pub mod types;
 use crate::components::save::save_records_with_polars;
+use pages::crud_samples;
 use types::*;
 
 use iced::widget::{

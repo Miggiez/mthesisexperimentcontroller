@@ -6,6 +6,7 @@ edition = "2024"
 [dependencies]
 base64 = "0.22.1"
 iced = { version = "0.14.0", features = ["canvas", "hot", "image", "tokio", "wgpu"] }
+iced_aw = { version = "0.13.1", default-features=false, features = ["context_menu", "drop_down", "menu", "tab_bar", "tabs"] }
 image = "0.25.9"
 polars = { version = "0.53.0", features = ["csv"] }
 rumqttc = "0.25.1"

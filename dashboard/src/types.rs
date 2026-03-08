@@ -20,6 +20,18 @@ pub struct SidecarPayload {
     pub message: Option<String>,
 }
 
+#[derive(Clone, PartialEq, Eq, Debug, Default)]
+pub enum TabId {
+    #[default]
+    Samples,
+}
+
+#[derive(Default)]
+pub struct TabBar {
+    active_tab: TabId,
+    crud_tab: CrudTab,
+}
+
 #[derive(Clone, Default)]
 pub struct QueuedRecord {
     pub vib_data: Option<VibrationPayload>,
@@ -55,6 +67,10 @@ pub enum Message {
     StartCamera,
     StopCamera,
     InitFileCounts((usize, usize, usize)),
+
+    TabSelected(TabId),
+    CRUD(CRUDMessage),
+    TabClosed(TabId),
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
